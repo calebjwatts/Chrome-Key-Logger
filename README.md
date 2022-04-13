@@ -27,6 +27,6 @@ Once installed run:
 ```cd ./Keylogger/server; python3 -m server```
 This will start the server.
 
-The server will passively recieve keystrokes from the extension and filter out keystrokes from URLs not containing the substring 'login'.
+The server will passively recieve keystrokes from the extension.
 
 To access the log you can open `log.json` in `./Keylogger/server` or by going to http://127.0.0.1:5000/dump which will dump the logfile to the page.
