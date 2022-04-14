@@ -1,17 +1,25 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Keylogger | Dump</title>
-    </head>
-    <body>
-        <h1>
-            Keylogger Dump
-        </h1>
-        {% for site in sites %}
-        <div>
-            <h2>{{ site.url }}</h2>
-            {{ site.keystrokes }}
+{% extends 'bootstrap/base.html' %}
+
+{% block title %}
+    Keylogger | Dump
+{% endblock %}
+
+{% block navbar %}
+<nav class="navbar navbar-default">
+        <div class="navbar-header">
+            <a class="navbar-brand">Keylogger | Dump</a>
         </div>
-        {% endfor %}
-    </body>
-</html>
+</nav>
+{% endblock %}
+
+{% block content %}
+    <h1>
+        Keylogger Dump
+    </h1>
+    {% for site in sites %}
+    <div>
+        <h2>{{ site.url }}</h2>
+        {{ site.keystrokes }}
+    </div>
+    {% endfor %}
+{% endblock %}

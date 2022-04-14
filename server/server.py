@@ -6,10 +6,10 @@
 import json
 from flask import Flask, render_template, request
 from flask_cors import CORS
-# from flask_bootstrap import Bootstrap
+from flask_bootstrap import Bootstrap
 
 APP = Flask(__name__)
-# bs = Bootstrap(APP)
+bs = Bootstrap(APP)
 CORS(APP)
 
 def check_log_exists_and_create_log():
