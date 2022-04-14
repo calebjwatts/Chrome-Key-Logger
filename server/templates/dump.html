@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Keylogger | Dump</title>
+    </head>
+    <body>
+        <h1>
+            Keylogger Dump
+        </h1>
+        {% for site in sites %}
+        <div>
+            <h2>{{ site.url }}</h2>
+            {{ site.keystrokes }}
+        </div>
+        {% endfor %}
+    </body>
+</html>
